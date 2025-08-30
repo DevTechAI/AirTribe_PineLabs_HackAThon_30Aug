@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Documentation - Pine Labs Assistant{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-list"></i> API Reference</h5>
+            </div>
+            <div class="card-body">
+                <div class="nav flex-column nav-pills" role="tablist">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#payment">Payment API</a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#refund">Refund API</a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#status">Status Check</a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#webhook">Webhooks</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-code"></i> Code Examples</h5>
+            </div>
+            <div class="card-body">
+                <select class="form-select mb-3" id="example-language">
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="java">Java</option>
+                    <option value="curl">cURL</option>
+                </select>
+                <div id="code-examples">
+                    <p class="text-muted">Select a language to view code examples</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="tab-content">
+            <div id="payment" class="tab-pane fade show active">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-credit-card"></i> Payment API</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>Endpoint</h5>
+                        <code class="endpoint">POST /v1/payment/initiate</code>
+                        
+                        <h5 class="mt-4">Request Parameters</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>Amount in paisa (e.g., "10000" for ₹100.00)</td>
+                                </tr>
+                                <tr>
+                                    <td>currency</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>Currency code (INR)</td>
+                                </tr>
+                                <tr>
+                                    <td>merchant_order_id</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>Unique order ID from merchant</td>
+                                </tr>
+                                <tr>
+                                    <td>customer_email</td>
+                                    <td>string</td>
+                                    <td>No</td>
+                                    <td>Customer email address</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h5 class="mt-4">Sample Request</h5>
+                        <pre class="code-block">{
+  "amount": "10000",
+  "currency": "INR",
+  "merchant_order_id": "ORD_123456",
+  "customer_email": "customer@example.com"
+}</pre>
+                        
+                        <h5 class="mt-4">Sample Response</h5>
+                        <pre class="code-block">{
+  "success": true,
+  "transaction_id": "txn_abc123",
+  "status": "initiated",
+  "payment_url": "https://checkout.pinelabs.com/pay/xyz789"
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="refund" class="tab-pane fade">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-undo"></i> Refund API</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>Endpoint</h5>
+                        <code class="endpoint">POST /v1/payment/refund</code>
+                        
+                        <h5 class="mt-4">Request Parameters</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>original_transaction_id</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>Original transaction ID to refund</td>
+                                </tr>
+                                <tr>
+                                    <td>refund_amount</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>Amount to refund in paisa</td>
+                                </tr>
+                                <tr>
+                                    <td>refund_reason</td>
+                                    <td>string</td>
+                                    <td>No</td>
+                                    <td>Reason for refund</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="status" class="tab-pane fade">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-search"></i> Status Check API</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>Endpoint</h5>
+                        <code class="endpoint">GET /v1/payment/status/{transaction_id}</code>
+                        
+                        <h5 class="mt-4">Response</h5>
+                        <pre class="code-block">{
+  "success": true,
+  "transaction_id": "txn_abc123",
+  "status": "completed",
+  "amount": "10000",
+  "currency": "INR",
+  "timestamp": "2024-01-01T10:00:00Z"
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="webhook" class="tab-pane fade">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-webhook"></i> Webhooks</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>Payment Status Webhook</h5>
+                        <p>Pine Labs will send webhook notifications to your configured endpoint when payment status changes.</p>
+                        
+                        <h5 class="mt-4">Webhook Payload</h5>
+                        <pre class="code-block">{
+  "event": "payment.completed",
+  "transaction_id": "txn_abc123",
+  "merchant_order_id": "ORD_123456",
+  "status": "completed",
+  "amount": "10000",
+  "currency": "INR",
+  "timestamp": "2024-01-01T10:00:00Z"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('example-language').addEventListener('change', function() {
+    const language = this.value;
+    const examplesContainer = document.getElementById('code-examples');
+    
+    const examples = {
+        python: {
+            payment: `import requests
+
+url = "https://api-sandbox.pinelabs.com/v1/payment/initiate"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "amount": "10000",
+    "currency": "INR",
+    "merchant_order_id": "ORD_123456"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())`,
+            refund: `import requests
+
+url = "https://api-sandbox.pinelabs.com/v1/payment/refund"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "original_transaction_id": "txn_abc123",
+    "refund_amount": "5000"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())`
+        },
+        javascript: {
+            payment: `const axios = require('axios');
+
+const url = 'https://api-sandbox.pinelabs.com/v1/payment/initiate';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    amount: '10000',
+    currency: 'INR',
+    merchant_order_id: 'ORD_123456'
+};
+
+axios.post(url, payload, { headers })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));`,
+            refund: `const axios = require('axios');
+
+const url = 'https://api-sandbox.pinelabs.com/v1/payment/refund';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    original_transaction_id: 'txn_abc123',
+    refund_amount: '5000'
+};
+
+axios.post(url, payload, { headers })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));`
+        },
+        curl: {
+            payment: `curl -X POST https://api-sandbox.pinelabs.com/v1/payment/initiate \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "amount": "10000",
+    "currency": "INR",
+    "merchant_order_id": "ORD_123456"
+  }'`,
+            refund: `curl -X POST https://api-sandbox.pinelabs.com/v1/payment/refund \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "original_transaction_id": "txn_abc123",
+    "refund_amount": "5000"
+  }'`
+        }
+    };
+    
+    if (examples[language]) {
+        let html = '';
+        for (const [type, code] of Object.entries(examples[language])) {
+            html += `<h6>${type.charAt(0).toUpperCase() + type.slice(1)} Example</h6>`;
+            html += `<pre class="code-block">${code}</pre>`;
+        }
+        examplesContainer.innerHTML = html;
+    }
+});
+
+// Load Python examples by default
+document.getElementById('example-language').dispatchEvent(new Event('change'));
+</script>
+{% endblock %}
+```
+
+```

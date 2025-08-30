@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}API Playground - Pine Labs Integration Assistant{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-flask"></i> API Playground</h5>
+            </div>
+            <div class="card-body">
+                <form id="api-test-form">
+                    <div class="mb-3">
+                        <label class="form-label">Integration Type</label>
+                        <select class="form-select" id="integration-type" onchange="updateForm()">
+                            <option value="payment">Payment</option>
+                            <option value="refund">Refund</option>
+                            <option value="status_check">Status Check</option>
+                        </select>
+                    </div>
+                    
+                    <div id="payment-fields">
+                        <div class="mb-3">
+                            <label class="form-label">Amount (in paisa)</label>
+                            <input type="number" class="form-control" id="amount" placeholder="10000" value="10000">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Currency</label>
+                            <input type="text" class="form-control" id="currency" placeholder="INR" value="INR">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Merchant Order ID</label>
+                            <input type="text" class="form-control" id="merchant-order-id" placeholder="ORD_123456">
+                        </div>
+                    </div>
+                    
+                    <div id="refund-fields" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Original Transaction ID</label>
+                            <input type="text" class="form-control" id="original-txn-id" placeholder="txn_123456">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Refund Amount</label>
+                            <input type="number" class="form-control" id="refund-amount" placeholder="5000">
+                        </div>
+                    </div>
+                    
+                    <div id="status-fields" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Transaction ID</label>
+                            <input type="text" class="form-control" id="txn-id" placeholder="txn_123456">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Merchant ID</label>
+                        <input type="text" class="form-control" id="merchant-id" placeholder="test_merchant">
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary" onclick="testIntegration()">
+                        <i class="fas fa-play"></i> Test Integration
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="validatePayload()">
+                        <i class="fas fa-check"></i> Validate Payload
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-code"></i> Request Payload</h5>
+            </div>
+            <div class="card-body">
+                <pre id="request-payload" class="code-block">{
+  "type": "payment",
+  "amount": "10000",
+  "currency": "INR",
+  "merchant_order_id": "ORD_123456",
+  "merchant_id": "test_merchant"
+}</pre>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-reply"></i> Response</h5>
+            </div>
+            <div class="card-body">
+                <div id="response-container">
+                    <p class="text-muted">Click "Test Integration" to see the response</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-lightbulb"></i> AI Suggestions</h5>
+            </div>
+            <div class="card-body">
+                <div id="suggestions-container">
+                    <p class="text-muted">Suggestions will appear here</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fas fa-exclamation-triangle"></i> Integration Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="error-content"></div>
+                <div id="error-suggestions" class="mt-3"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="fixWithAI()">Fix with AI</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentError = null;
+
+function updateForm() {
+    const type = document.getElementById('integration-type').value;
+    
+    // Hide all field groups
+    document.getElementById('payment-fields').style.display = 'none';
+    document.getElementById('refund-fields').style.display = 'none';
+    document.getElementById('status-fields').style.display = 'none';
+    
+    // Show relevant fields
+    if (type === 'payment') {
+        document.getElementById('payment-fields').style.display = 'block';
+    } else if (type === 'refund') {
+        document.getElementById('refund-fields').style.display = 'block';
+    } else if (type === 'status_check') {
+        document.getElementById('status-fields').style.display = 'block';
+    }
+    
+    updatePayload();
+}
+
+function updatePayload() {
+    const type = document.getElementById('integration-type').value;
+    const merchantId = document.getElementById('merchant-id').value;
+    
+    let payload = {
+        type: type,
+        merchant_id: merchantId
+    };
+    
+    if (type === 'payment') {
+        payload.amount = document.getElementById('amount').value;
+        payload.currency = document.getElementById('currency').value;
+        payload.merchant_order_id = document.getElementById('merchant-order-id').value;
+    } else if (type === 'refund') {
+        payload.original_transaction_id = document.getElementById('original-txn-id').value;
+        payload.refund_amount = document.getElementById('refund-amount').value;
+    } else if (type === 'status_check') {
+        payload.transaction_id = document.getElementById('txn-id').value;
+    }
+    
+    document.getElementById('request-payload').textContent = JSON.stringify(payload, null, 2);
+}
+
+function testIntegration() {
+    const payload = JSON.parse(document.getElementById('request-payload').textContent);
+    
+    document.getElementById('response-container').innerHTML = '<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>';
+    
+    fetch('/test-integration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayResponse(data);
+    })
+    .catch(error => {
+        displayResponse({ success: false, error: error.message });
+    });
+}
+
+function validatePayload() {
+    const payload = JSON.parse(document.getElementById('request-payload').textContent);
+    
+    fetch('/api/validate-payload', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayValidation(data);
+    });
+}
+
+function displayResponse(data) {
+    const container = document.getElementById('response-container');
+    const suggestionsContainer = document.getElementById('suggestions-container');
+    
+    if (data.success) {
+        container.innerHTML = `<pre class="code-block text-success">${JSON.stringify(data, null, 2)}</pre>`;
+        suggestionsContainer.innerHTML = '<p class="text-success"><i class="fas fa-check"></i> Integration successful!</p>';
+    } else {
+        container.innerHTML = `<pre class="code-block text-danger">${JSON.stringify(data, null, 2)}</pre>`;
+        currentError = data;
+        
+        let suggestionsHtml = '<p class="text-warning"><i class="fas fa-lightbulb"></i> Suggestions:</p><ul>';
+        if (data.suggestions) {
+            data.suggestions.forEach(suggestion => {
+                suggestionsHtml += `<li>${suggestion}</li>`;
+            });
+        }
+        suggestionsHtml += '</ul>';
+        suggestionsContainer.innerHTML = suggestionsHtml;
+        
+        // Show error modal
+        showErrorModal(data);
+    }
+}
+
+function displayValidation(data) {
+    const suggestionsContainer = document.getElementById('suggestions-container');
+    
+    if (data.valid) {
+        suggestionsContainer.innerHTML = '<p class="text-success"><i class="fas fa-check"></i> Payload is valid!</p>';
+    } else {
+        let html = '<p class="text-danger"><i class="fas fa-exclamation-triangle"></i> Validation errors:</p><ul>';
+        data.errors.forEach(error => {
+            html += `<li class="text-danger">${error}</li>`;
+        });
+        html += '</ul>';
+        
+        if (data.suggestions && data.suggestions.length > 0) {
+            html += '<p class="text-info"><i class="fas fa-lightbulb"></i> Suggestions:</p><ul>';
+            data.suggestions.forEach(suggestion => {
+                html += `<li>${suggestion}</li>`;
+            });
+            html += '</ul>';
+        }
+        
+        suggestionsContainer.innerHTML = html;
+    }
+}
+
+function showErrorModal(errorData) {
+    const errorContent = document.getElementById('error-content');
+    const errorSuggestions = document.getElementById('error-suggestions');
+    
+    errorContent.innerHTML = `<pre class="text-danger">${JSON.stringify(errorData, null, 2)}</pre>`;
+    
+    let suggestionsHtml = '';
+    if (errorData.suggestions && errorData.suggestions.length > 0) {
+        suggestionsHtml = '<p><strong>Suggestions to fix:</strong></p><ul>';
+        errorData.suggestions.forEach(suggestion => {
+            suggestionsHtml += `<li>${suggestion}</li>`;
+        });
+        suggestionsHtml += '</ul>';
+    }
+    
+    errorSuggestions.innerHTML = suggestionsHtml;
+    $('#errorModal').modal('show');
+}
+
+function fixWithAI() {
+    if (!currentError) return;
+    
+    const payload = JSON.parse(document.getElementById('request-payload').textContent);
+    
+    fetch('/ai/fix-error', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            error_message: JSON.stringify(currentError),
+            code: JSON.stringify(payload),
+            language: 'json'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('request-payload').textContent = data.fixed_code;
+            $('#errorModal').modal('hide');
+        }
+    });
+}
+
+// Update payload on input changes
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('input, select').forEach(element => {
+        element.addEventListener('input', updatePayload);
+    });
+    updateForm();
+});
+</script>
+{% endblock %}
+```
+
+```

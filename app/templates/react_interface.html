@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block title %}ReAct Agent - Pine Labs Integration Assistant{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar with Agent Info -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-robot"></i> ReAct Agent</h5>
+                </div>
+                <div class="card-body">
+                    <div class="agent-status">
+                        <div class="status-indicator active"></div>
+                        <span class="status-text">Ready to assist</span>
+                    </div>
+                    
+                    <div class="agent-info mt-3">
+                        <p><strong>Capabilities:</strong></p>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-code text-success"></i> Generate Integration Code</li>
+                            <li><i class="fas fa-check text-info"></i> Validate Payloads</li>
+                            <li><i class="fas fa-flask text-warning"></i> Test Integrations</li>
+                            <li><i class="fas fa-wrench text-danger"></i> Fix Errors</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agent-actions mt-3">
+                        <button class="btn btn-outline-secondary btn-sm w-100" onclick="clearConversation()">
+                            <i class="fas fa-trash"></i> Clear Chat
+                        </button>
+                        <button class="btn btn-outline-info btn-sm w-100 mt-2" onclick="showActions()">
+                            <i class="fas fa-list"></i> Available Actions
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Current Task Status -->
+            <div class="card mt-3" id="task-status-card" style="display: none;">
+                <div class="card-header">
+                    <h6><i class="fas fa-tasks"></i> Current Task</h6>
+                </div>
+                <div class="card-body">
+                    <div id="task-status"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Chat Interface -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4><i class="fas fa-comments"></i> ReAct Conversation</h4>
+                    <div class="conversation-stats">
+                        <small class="text-muted">
+                            <span id="message-count">0</span> messages
+                        </small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Chat Messages Area -->
+                    <div id="chat-messages" class="chat-messages">
+                        <div class="welcome-message">
+                            <div class="message assistant-message">
+                                <div class="message-header">
+                                    <i class="fas fa-robot"></i>
+                                    <strong>Pine Labs ReAct Agent</strong>
+                                    <small class="text-muted">Just now</small>
+                                </div>
+                                <div class="message-content">
+                                    <p>Hello! I'm your ReAct agent for Pine Labs integration assistance.</p>
+                                    <p>I can help you by:</p>
+                                    <ul>
+                                        <li><strong>Reasoning</strong> about your integration needs</li>
+                                        <li><strong>Acting</strong> on specific tasks like code generation</li>
+                                        <li><strong>Observing</strong> results and providing feedback</li>
+                                        <li><strong>Responding</strong> with clear guidance</li>
+                                    </ul>
+                                    <p>What would you like to work on today? You can ask me to generate code, validate payloads, test integrations, or fix errors.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Typing Indicator -->
+                    <div id="typing-indicator" class="typing-indicator" style="display: none;">
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <small class="text-muted">Agent is thinking...</small>
+                    </div>
+                    
+                    <!-- Message Input -->
+                    <div class="message-input-container">
+                        <div class="input-group">
+                            <input type="text" id="message-input" class="form-control" 
+                                   placeholder="Ask me to generate code, validate payloads, test integrations, or fix errors..."
+                                   onkeypress="handleKeyPress(event)">
+                            <button class="btn btn-primary" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                        </div>
+                        <div class="input-hints mt-2">
+                            <small class="text-muted">
+                                <strong>Try:</strong> "Generate Python code for payment integration" | 
+                                "Validate this payload" | 
+                                "Test my integration" | 
+                                "Fix this error"
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Details Modal -->
+<div class="modal fade" id="actionsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-list"></i> Available Actions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="actions-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reasoning Modal -->
+<div class="modal fade" id="reasoningModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-brain"></i> Agent Reasoning</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="reasoning-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let messageCount = 0;
+
+function sendMessage() {
+    const input = document.getElementById('message-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message
+    addMessage('user', message);
+    input.value = '';
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    // Send to ReAct agent
+    fetch('/react_assistant/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            message: message,
+            context: getCurrentContext()
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideTypingIndicator();
+        
+        if (data.success) {
+            addMessage('assistant', data.response, {
+                reasoning: data.reasoning,
+                action_taken: data.action_taken,
+                observation: data.observation,
+                result: data.result
+            });
+        } else {
+            addMessage('assistant', `Error: ${data.error}`, {error: true});
+        }
+    })
+    .catch(error => {
+        hideTypingIndicator();
+        addMessage('assistant', `Network error: ${error.message}`, {error: true});
+    });
+}
+
+function addMessage(sender, content, metadata = {}) {
+    const messagesDiv = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const timestamp = new Date().toLocaleTimeString();
+    
+    let reasoningButton = '';
+    if (metadata.reasoning) {
+        reasoningButton = `<button class="btn btn-sm btn-outline-info ms-2" onclick="showReasoning('${metadata.reasoning.replace(/'/g, "\\'")}')">
+            <i class="fas fa-brain"></i> Reasoning
+        </button>`;
+    }
+    
+    let actionBadge = '';
+    if (metadata.action_taken) {
+        actionBadge = `<span class="badge bg-primary ms-2">${metadata.action_taken}</span>`;
+    }
+    
+    messageDiv.innerHTML = `
+        <div class="message-header">
+            <i class="fas fa-${sender === 'user' ? 'user' : 'robot'}"></i>
+            <strong>${sender === 'user' ? 'You' : 'ReAct Agent'}</strong>
+            <small class="text-muted">${timestamp}</small>
+            ${actionBadge}
+            ${reasoningButton}
+        </div>
+        <div class="message-content">
+            ${formatContent(content, metadata)}
+        </div>
+    `;
+    
+    messagesDiv.appendChild(messageDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    messageCount++;
+    updateMessageCount();
+}
+
+function formatContent(content, metadata) {
+    // Format code blocks
+    content = content.replace(/```([\w]*)\n?([\s\S]*?)```/g, '<pre class="code-block"><code>$2</code></pre>');
+    
+    // Format inline code
+    content = content.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+    
+    // Format lists
+    content = content.replace(/^\* (.*)$/gm, '<li>$1</li>');
+    content = content.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+    
+    // Add action results if present
+    if (metadata.result && Object.keys(metadata.result).length > 0) {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'action-result mt-3';
+        
+        if (metadata.result.code) {
+            resultDiv.innerHTML = `
+                <h6><i class="fas fa-code"></i> Generated Code:</h6>
+                <pre class="code-block">${metadata.result.code}</pre>
+            `;
+        } else if (metadata.result.success !== undefined) {
+            const statusIcon = metadata.result.success ? 'check-circle text-success' : 'times-circle text-danger';
+            resultDiv.innerHTML = `
+                <h6><i class="fas fa-${statusIcon}"></i> Action Result:</h6>
+                <pre class="code-block">${JSON.stringify(metadata.result, null, 2)}</pre>
+            `;
+        }
+        
+        return content + resultDiv.outerHTML;
+    }
+    
+    return content;
+}
+
+function showReasoning(reasoning) {
+    document.getElementById('reasoning-content').innerHTML = `<pre>${reasoning}</pre>`;
+    $('#reasoningModal').modal('show');
+}
+
+function showTypingIndicator() {
+    document.getElementById('typing-indicator').style.display = 'flex';
+}
+
+function hideTypingIndicator() {
+    document.getElementById('typing-indicator').style.display = 'none';
+}
+
+function clearConversation() {
+    if (confirm('Are you sure you want to clear the conversation?')) {
+        document.getElementById('chat-messages').innerHTML = '';
+        messageCount = 0;
+        updateMessageCount();
+        
+        fetch('/react_assistant/clear', {
+            method: 'POST'
+        }).then(() => {
+            // Re-add welcome message
+            location.reload();
+        });
+    }
+}
+
+function showActions() {
+    fetch('/react_assistant/actions')
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            let html = '';
+            for (const [actionName, actionInfo] of Object.entries(data.actions)) {
+                html += `
+                    <div class="action-item">
+                        <h6><code>${actionName}</code></h6>
+                        <p>${actionInfo.description}</p>
+                        <div class="parameters">
+                            <strong>Parameters:</strong>
+                            <ul>
+                                ${Object.entries(actionInfo.parameters).map(([param, desc]) => 
+                                    `<li><code>${param}</code>: ${desc}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                `;
+            }
+            document.getElementById('actions-list').innerHTML = html;
+            $('#actionsModal').modal('show');
+        }
+    });
+}
+
+function getCurrentContext() {
+    // Get current conversation context
+    const messages = Array.from(document.querySelectorAll('.message')).map(msg => ({
+        sender: msg.classList.contains('user-message') ? 'user' : 'assistant',
+        content: msg.querySelector('.message-content').textContent
+    }));
+    
+    return {
+        message_count: messages.length,
+        recent_messages: messages.slice(-5) // Last 5 messages
+    };
+}
+
+function updateMessageCount() {
+    document.getElementById('message-count').textContent = messageCount;
+}
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    updateMessageCount();
+});
+</script>
+{% endblock %} 

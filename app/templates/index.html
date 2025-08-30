@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}Pine Labs Integration Assistant - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-rocket"></i> Welcome to Pine Labs Integration Assistant</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">Your AI-powered companion for seamless Pine Labs payment API integration.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="feature-card text-center">
+                            <i class="fas fa-play-circle fa-3x text-primary mb-3"></i>
+                            <h5>Test Instantly</h5>
+                            <p>Use our interactive playground to test API calls without writing code.</p>
+                            <a href="/playground" class="btn btn-primary">Try Playground</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card text-center">
+                            <i class="fas fa-robot fa-3x text-success mb-3"></i>
+                            <h5>AI Assistant</h5>
+                            <p>Get instant help with integration questions and error resolution.</p>
+                            <button class="btn btn-success" onclick="openAIChat()">Chat with AI</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card text-center">
+                            <i class="fas fa-code fa-3x text-warning mb-3"></i>
+                            <h5>Generate Code</h5>
+                            <p>Auto-generate integration code in your preferred language.</p>
+                            <button class="btn btn-warning" onclick="openCodeGenerator()">Generate Code</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line"></i> Integration Stats</h5>
+            </div>
+            <div class="card-body">
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-integrations">0</span>
+                        <span class="stat-label">Total Tests</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="success-rate">0%</span>
+                        <span class="stat-label">Success Rate</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="active-merchants">0</span>
+                        <span class="stat-label">Active Merchants</span>
+                    </div>
+                </div>
+                <a href="/dashboard" class="btn btn-outline-primary btn-sm mt-3">View Dashboard</a>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-lightbulb"></i> Quick Tips</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success"></i> Start with sandbox credentials</li>
+                    <li><i class="fas fa-check text-success"></i> Validate payloads before testing</li>
+                    <li><i class="fas fa-check text-success"></i> Use proper error handling</li>
+                    <li><i class="fas fa-check text-success"></i> Test with small amounts first</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Chat Modal -->
+<div class="modal fade" id="aiChatModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-robot"></i> AI Assistant</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="input-group mt-3">
+                    <input type="text" id="chat-input" class="form-control" placeholder="Ask me about Pine Labs integration...">
+                    <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Code Generator Modal -->
+<div class="modal fade" id="codeGenModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-code"></i> Code Generator</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <select id="code-language" class="form-select mb-3">
+                            <option value="python">Python</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="java">Java</option>
+                        </select>
+                        <select id="code-type" class="form-select mb-3">
+                            <option value="payment">Payment</option>
+                            <option value="refund">Refund</option>
+                            <option value="status_check">Status Check</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="generateCode()">Generate Code</button>
+                    </div>
+                    <div class="col-md-8">
+                        <pre id="generated-code" class="code-block"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openAIChat() {
+    $('#aiChatModal').modal('show');
+}
+
+function openCodeGenerator() {
+    $('#codeGenModal').modal('show');
+}
+
+function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    if (!message) return;
+    
+    // Add user message
+    addChatMessage('user', message);
+    input.value = '';
+    
+    // Send to AI assistant
+    fetch('/ai/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            addChatMessage('assistant', data.response);
+        } else {
+            addChatMessage('assistant', 'Sorry, I encountered an error: ' + data.error);
+        }
+    });
+}
+
+function addChatMessage(sender, message) {
+    const messagesDiv = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}`;
+    messageDiv.innerHTML = `<strong>${sender === 'user' ? 'You' : 'AI'}:</strong> ${message}`;
+    messagesDiv.appendChild(messageDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function generateCode() {
+    const language = document.getElementById('code-language').value;
+    const type = document.getElementById('code-type').value;
+    
+    fetch('/generate-code', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ language: language, type: type })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('generated-code').textContent = data.code;
+        } else {
+            document.getElementById('generated-code').textContent = 'Error: ' + data.error;
+        }
+    });
+}
+
+// Load stats on page load
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/integrations')
+    .then(response => response.json())
+    .then(data => {
+        const total = data.length;
+        const successful = data.filter(item => item.status === 'success').length;
+        const successRate = total > 0 ? Math.round((successful / total) * 100) : 0;
+        
+        document.getElementById('total-integrations').textContent = total;
+        document.getElementById('success-rate').textContent = successRate + '%';
+    });
+});
+</script>
+{% endblock %} 
