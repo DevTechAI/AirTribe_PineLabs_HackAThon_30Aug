@@ -1,0 +1,553 @@
+{
+	"info": {
+		"_postman_id": "a3e8c2b3-3567-4163-b403-10e5693623f1",
+		"name": "Public all mode",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "43453999"
+	},
+	"item": [
+		{
+			"name": "Generate Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"// Check if the response code is 200 or 201\r",
+							"if (pm.response.code == 200 || pm.response.code == 201) {\r",
+							"    // Log the entire JSON response (optional)\r",
+							"    console.log(jsonData);\r",
+							"\r",
+							"    // Extract the access token from the response\r",
+							"    var accessToken = jsonData[\"access_token\"];\r",
+							"\r",
+							"    // Set the access token as an environment variable\r",
+							"    pm.environment.set(\"accessToken\", accessToken);\r",
+							"\r",
+							"    // Set the access token as a collection variable\r",
+							"    pm.collectionVariables.set(\"accesstoken\", accessToken);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{mtoken}}"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "//112211\r\n// {\r\n//   \"client_id\": \"43f025a8-5012-44cb-8e91-b661b15f89cb\",\r\n//   \"client_secret\": \"7687d6a5326f4fbfa1ba84697f964416\",\r\n//   \"grant_type\": \"client_credentials\"\r\n// }\r\n// 111260\r\n// {\r\n//   \"client_id\": \"5a9f7a50-276d-41a1-b189-1c82f748cd65\",\r\n//   \"client_secret\": \"4d45ed4892b244328347fc688d1d959c\",\r\n//   \"grant_type\": \"client_credentials\"\r\n// }\r\n//111383\r\n// {\r\n//   \"client_id\": \"844d40f0-81cf-4e87-9b89-9f1f35b8692e\",\r\n//   \"client_secret\": \"f420d050236741499ca5a529055b72e8\",\r\n//   \"grant_type\": \"client_credentials\"\r\n// }\r\n//113099\r\n{\r\n  \"client_id\": \"6a7a29ca-ad0f-4c8b-aff9-f1ebfa0a3548\",\r\n  \"client_secret\": \"24979829127b40139a3d581eb1da592f\",\r\n  \"grant_type\": \"client_credentials\"\r\n}\r\n//113356\r\n// {\r\n//   \"client_id\": \"29aa4ff4-7319-4310-93fd-f39e3bfb92fe\",\r\n//   \"client_secret\": \"8fc0d1239c994579b36e77396079eaea\",\r\n//   \"grant_type\": \"client_credentials\"\r\n// }\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/auth/v1/token",
+				"description": "Generated from cURL: curl --location 'https://pluraluat.v2.pinepg.in/api/auth/v1/token' \\\r\n--header 'accept: application/json' \\\r\n--header 'content-type: application/json' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n{\r\n  \"client_id\": \"fbc52d7e-711f-4d6b-9987-182135678369\",\r\n  \"client_secret\": \"c317f48c33fe41c0985b383f9c0748ec\",\r\n  \"grant_type\": \"client_credentials\"\r\n}\r\n\r\n'"
+			},
+			"response": []
+		},
+		{
+			"name": "Payment Option PBP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Merchant-ID",
+						"value": "107444"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3MzM4NDUxOTEsImlhdCI6MTczMzgxNjM5MSwianRpIjoiMjI3MWM4ZjktZGFiNC00NmRiLWFiYjYtNTkyNjczNmNjMmU5IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiJkYjAzZTg2ZS0zN2VjLTRkYzMtYTY4Mi00OGJkYjk4ZmIzM2UiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiI2NDQwODM2My0yMmZhLTQ4ZjctYTQwOS0zZjk1YmRlZTE2OTYiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEAyOTk3NjY3Zi0yOGMyLTQwMmYtOTc5ZC05OGI0ZDE3MDUwZGIiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljg5LjQ0IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC44OS40NCIsImNsaWVudF9pZCI6IjY0NDA4MzYzLTIyZmEtNDhmNy1hNDA5LTNmOTViZGVlMTY5NiIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTA3NDQ0In19.DetlDud-DhhF4bzIXBGI9Nv_gu0YRWCU8YjaAGASt8-_Bn_BnSqgFxZlMUdlJgIDWM2JKcilHF-9NjzgNQL_QpvAmNyTRiDAGxDVnVmfV4BfjyLah1HN2u-akovBr5gAan0eQMcoRFJAWv9i63oQ0w9xnT3ydoZ1ZZXpYrNL3MpagR0bB2euezKKXoCB1Q6snASTEyc9dkFH4_AW_jOJqP6FxsQLdoua-2-Y1p8KESdLph7ctCzAF7Fwd9yIUb2Z6tXMhfsYZ6Ha52TY4b53rp3D1v1iLPrYkotm2S3vsNnd6OTo1lhKCtHKMtOkXzfzUqNy_8i5m48KyYg9NJtQvQ"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payment_method\": \"POINTS\",\r\n    \"payment_option\": {\r\n        \"points_card_details\": {\r\n            \"card_last4\": \"1091\",\r\n            \"card_number\": \"4000000000001091\",\r\n            \"registered_mobile_number\": \"6351645831\"\r\n        }\r\n    },\r\n    \"order_details\": {\r\n        \"order_amount\": {\r\n            \"value\": 2000,\r\n            \"currency\": \"INR\"\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://payment-option-gateway-uat.v2.pinepg.in/payment-option",
+				"description": "Generated from cURL: curl --location 'https://payment-option-gateway-uat.v2.pinepg.in/payment-option' \\\r\n--header 'Accept: application/json' \\\r\n--header 'Merchant-ID: 107444' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3MzM4NDUxOTEsImlhdCI6MTczMzgxNjM5MSwianRpIjoiMjI3MWM4ZjktZGFiNC00NmRiLWFiYjYtNTkyNjczNmNjMmU5IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiJkYjAzZTg2ZS0zN2VjLTRkYzMtYTY4Mi00OGJkYjk4ZmIzM2UiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiI2NDQwODM2My0yMmZhLTQ4ZjctYTQwOS0zZjk1YmRlZTE2OTYiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEAyOTk3NjY3Zi0yOGMyLTQwMmYtOTc5ZC05OGI0ZDE3MDUwZGIiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljg5LjQ0IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC44OS40NCIsImNsaWVudF9pZCI6IjY0NDA4MzYzLTIyZmEtNDhmNy1hNDA5LTNmOTViZGVlMTY5NiIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTA3NDQ0In19.DetlDud-DhhF4bzIXBGI9Nv_gu0YRWCU8YjaAGASt8-_Bn_BnSqgFxZlMUdlJgIDWM2JKcilHF-9NjzgNQL_QpvAmNyTRiDAGxDVnVmfV4BfjyLah1HN2u-akovBr5gAan0eQMcoRFJAWv9i63oQ0w9xnT3ydoZ1ZZXpYrNL3MpagR0bB2euezKKXoCB1Q6snASTEyc9dkFH4_AW_jOJqP6FxsQLdoua-2-Y1p8KESdLph7ctCzAF7Fwd9yIUb2Z6tXMhfsYZ6Ha52TY4b53rp3D1v1iLPrYkotm2S3vsNnd6OTo1lhKCtHKMtOkXzfzUqNy_8i5m48KyYg9NJtQvQ' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data '{\r\n    \"payment_method\": \"POINTS\",\r\n    \"payment_option\": {\r\n        \"points_card_details\": {\r\n            \"card_last4\": \"1091\",\r\n            \"card_number\": \"4000000000001091\",\r\n            \"registered_mobile_number\": \"6351645831\"\r\n        }\r\n    },\r\n    \"order_details\": {\r\n        \"order_amount\": {\r\n            \"value\": 2000,\r\n            \"currency\": \"INR\"\r\n        }\r\n    }\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonBody = JSON.parse(pm.response.text());\r",
+							"const orderId = jsonBody.data.order_id;\r",
+							"pm.collectionVariables.set(\"orderId\", orderId);\r",
+							" "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Merchant-ID",
+						"value": "110553"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"merchant_order_reference\": {{$guid}},\r\n    \"order_amount\": {\r\n        \"value\": 1000,\r\n        \"currency\": \"INR\"\r\n    },\r\n    \"pre_auth\": false,\r\n    \"purchase_details\": {\r\n        \"customer\": {\r\n            \"email_id\": \"joe.sam@gmail.com\",\r\n            \"first_name\": \"joe\",\r\n            \"last_name\": \"kumar\",\r\n            \r\n            \"mobile_number\": \"192192883\",\r\n            \"billing_address\": {\r\n                \"address1\": \"H.No 15, Sector 17\",\r\n                \"address2\": \"\",\r\n                \"address3\": \"\",\r\n                \"pincode\": \"61232112\",\r\n                \"city\": \"CHANDIGARH\",\r\n                \"state\": \"PUNJAB\",\r\n                \"country\": \"INDIA\"\r\n            },\r\n            \"shipping_address\": {\r\n                \"address1\": \"H.No 15, Sector 17\",\r\n                \"address2\": \"string\",\r\n                \"address3\": \"string\",\r\n                \"pincode\": \"144001123\",\r\n                \"city\": \"CHANDIGARH\",\r\n                \"state\": \"PUNJAB\",\r\n                \"country\": \"INDIA\"\r\n            }\r\n        },\r\n        \"merchant_metadata\": {\r\n            \"key1\": \"value1\",\r\n            \"key2\": \"value2\"\r\n        }\r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/orders",
+				"description": "Generated from cURL: curl --location 'https://pluraluat.v2.pinepg.in/api/pay/v1/orders' \\\r\n--header 'Merchant-ID: 110553' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data-raw '{\r\n    \"merchant_order_reference\": 08e6fa50-5b1e-4578-9d3a-b5fd84b95968,\r\n    \"order_amount\": {\r\n        \"value\": 1000,\r\n        \"currency\": \"INR\"\r\n    },\r\n    \"pre_auth\": false,\r\n    \"purchase_details\": {\r\n        \"customer\": {\r\n            \"email_id\": \"joe.sam@gmail.com\",\r\n            \"first_name\": \"joe\",\r\n            \"last_name\": \"kumar\",\r\n            \r\n            \"mobile_number\": \"192192883\",\r\n            \"billing_address\": {\r\n                \"address1\": \"H.No 15, Sector 17\",\r\n                \"address2\": \"\",\r\n                \"address3\": \"\",\r\n                \"pincode\": \"61232112\",\r\n                \"city\": \"CHANDIGARH\",\r\n                \"state\": \"PUNJAB\",\r\n                \"country\": \"INDIA\"\r\n            },\r\n            \"shipping_address\": {\r\n                \"address1\": \"H.No 15, Sector 17\",\r\n                \"address2\": \"string\",\r\n                \"address3\": \"string\",\r\n                \"pincode\": \"144001123\",\r\n                \"city\": \"CHANDIGARH\",\r\n                \"state\": \"PUNJAB\",\r\n                \"country\": \"INDIA\"\r\n            }\r\n        },\r\n        \"merchant_metadata\": {\r\n            \"key1\": \"value1\",\r\n            \"key2\": \"value2\"\r\n        }\r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n        \r\n    }\r\n}\r\n'"
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{{orderId}}",
+				"description": "Generated from cURL: curl --location 'https://pluraluat.v2.pinepg.in/api/pay/v1/orders/v1-250121115147-aa-pN2sVV' \\\r\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016'"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Payment Card",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payments\": [\r\n        {\r\n            \"merchant_payment_reference\": {{$guid}},\r\n            \"payment_method\": \"CARD\",\r\n            \"payment_amount\": {\r\n                \"value\": 1000,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"card_details\": {\r\n                    \"name\": \"INDRANI DUTTA\",\r\n                    \"card_number\": \"5200000000001096\",\r\n                    \"cvv\": \"123\",\r\n                    \"expiry_month\": \"01\",\r\n                    \"expiry_year\": \"2026\"\r\n                }\r\n            }\r\n        }     \r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{{orderId}}/payments",
+				"description": "Generated from cURL: curl --location 'https://pluraluat.v2.pinepg.in/api/pay/v1/orders/v1-250121115147-aa-pN2sVV/payments' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data '{\r\n    \"payments\": [\r\n        {\r\n            \"merchant_payment_reference\": \"qyjszddhfjaeraw\",\r\n            \"payment_method\": \"CARD\",\r\n            \"payment_amount\": {\r\n                \"value\": 1000,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"card_details\": {\r\n                    \"name\": \"INDRANI DUTTA\",\r\n                    \"card_number\": \"4000000000001091\",\r\n                    \"cvv\": \"123\",\r\n                    \"expiry_month\": \"01\",\r\n                    \"expiry_year\": \"2026\"\r\n                }\r\n            }\r\n        }     \r\n    ]\r\n}\r\n'"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Payment UPI",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Merchant-ID",
+						"value": "111302",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3MzY0NjkwNjMsImlhdCI6MTczNjQ0MDI2MywianRpIjoiZDk2ZjNhNTEtODI1ZS00NDFmLWExZDUtOTNjNzVhMDZhN2Y4IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1LjExNiIsImNsaWVudEFkZHJlc3MiOiIxMC4yMDguOTUuMTE2IiwiY2xpZW50X2lkIjoiZmJjNTJkN2UtNzExZi00ZDZiLTk5ODctMTgyMTM1Njc4MzY5IiwiYXR0cnMiOnsibWVyY2hhbnQtaWQiOiIxMTE1OTAifX0.NYu1DeY9Cgbrc0bYhsxrhq8Lu3cE0boveLp6yNDO-f_IQ_N303_s6a0JFce1O-CotpjGRUrWjSGvv7CiZEjio0qeZTnZDZoiNVTlsu-iU2v_i3-LT6ux4nDEfA5TDkFcJyiEJCj0mhMNqOX2i3j2Zme2NOPIO3Vj56anhe8eBMYt-t2XvxDthStcdXnKw9ekNOHOOhDJs6cm9Pbwr9QL4IKevPDBiH-kIMO5LzsfvXa9pbgrBJ1GZlgvjNZ0LPh7eNqJ7ZCWuAlrYoIICFsiX05tYYMrWttv_XCkrbsYpEBkFOp4-hhgB32TVbIEmj2lhrSsZDNdQHfPrCLG74wEeA"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payments\": [\r\n        {\r\n             \"merchant_payment_reference\": {{$guid}},\r\n            \"payment_method\": \"UPI\",\r\n            \"payment_amount\": {\r\n                \"value\": 200,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"upi_details\": {\r\n                    \"txn_mode\": \"INTENT\"\r\n                    \r\n                    \r\n                    \r\n                }\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{{orderId}}/payments",
+				"description": "Generated from cURL: curl --location 'https://pluraluat.v2.pinepg.in/api/pay/v1/orders/v1-250109163137-aa-zM7lr6/payments' \\\r\n--header 'Merchant-ID: 111302' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3MzY0NjkwNjMsImlhdCI6MTczNjQ0MDI2MywianRpIjoiZDk2ZjNhNTEtODI1ZS00NDFmLWExZDUtOTNjNzVhMDZhN2Y4IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1LjExNiIsImNsaWVudEFkZHJlc3MiOiIxMC4yMDguOTUuMTE2IiwiY2xpZW50X2lkIjoiZmJjNTJkN2UtNzExZi00ZDZiLTk5ODctMTgyMTM1Njc4MzY5IiwiYXR0cnMiOnsibWVyY2hhbnQtaWQiOiIxMTE1OTAifX0.NYu1DeY9Cgbrc0bYhsxrhq8Lu3cE0boveLp6yNDO-f_IQ_N303_s6a0JFce1O-CotpjGRUrWjSGvv7CiZEjio0qeZTnZDZoiNVTlsu-iU2v_i3-LT6ux4nDEfA5TDkFcJyiEJCj0mhMNqOX2i3j2Zme2NOPIO3Vj56anhe8eBMYt-t2XvxDthStcdXnKw9ekNOHOOhDJs6cm9Pbwr9QL4IKevPDBiH-kIMO5LzsfvXa9pbgrBJ1GZlgvjNZ0LPh7eNqJ7ZCWuAlrYoIICFsiX05tYYMrWttv_XCkrbsYpEBkFOp4-hhgB32TVbIEmj2lhrSsZDNdQHfPrCLG74wEeA' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data '{\r\n    \"payments\": [\r\n        {\r\n             \"merchant_payment_reference\": \"qyjsztwajhradw\",\r\n            \"payment_method\": \"UPI\",\r\n            \"payment_amount\": {\r\n                \"value\": 200,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"upi_details\": {\r\n                    \"txn_mode\": \"INTENT\"\r\n                    \r\n                    \r\n                    \r\n                }\r\n            }\r\n        }\r\n    ]\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Payment Netbanking",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Merchant-ID",
+						"value": "111303",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3MzI4MTA5NzcsImlhdCI6MTczMjc4MjE3NywianRpIjoiYjNjM2VjZjQtYmFhMS00ZTIzLWIzN2QtYjllZTI4YWUyOTUxIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiJlNDhhNWM3Yy1iYjU3LTQ1ZWUtOTRjMy0wMzU1MDcxNmVlNzQiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiI1OTE5NGZlNS00YzI3LTRlNmUtOGRlYi00ZTU5ZjhmNGZkN2IiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsInVtYV9hdXRob3JpemF0aW9uIiwiYm90QGJjNmQwMDA4LTlkOGItNDQzNi1hYWE0LTNjZmZhY2FiNTUyYiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljg5LjQ0IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC44OS40NCIsImNsaWVudF9pZCI6IjU5MTk0ZmU1LTRjMjctNGU2ZS04ZGViLTRlNTlmOGY0ZmQ3YiIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExMDc3In19.inji1UEHovPmdDBv3Y6Ey3KpMrxtjFcImvG3RZ7D40WelRwyay1GPeqKYNogP4RnWX8dDUaGStrT25rso0mS03y2b2_h2MpIpKvbmVUV973SafPTI8dxb83GNjjgX2MtyzIRteT1PQXu6vekG7smtexQScMtxQW2Uc2LmvnMceTkCCfdenb7qyg_j6yLIic_RxI0CzDUDHpQ-NRSwL_-ZYvelCtkMC74Xbz8smR9Lfa2XdMNWVygqS1SBE7Oe_Ge-FLop1OHJkaP5JNZdz-4LcyEL3y_8es_rHJXkUIhXgfA2_ZyOs7krKQrKlx4EcH45IAYtBmKfZ-D_U0FfeA-2g"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payments\": [\r\n        {\r\n            \"payment_method\": \"NETBANKING\",\r\n            \"payment_amount\": {\r\n                \"value\": 10000,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"netbanking_details\": {\r\n                    \"pay_code\": \"NB1531\"\r\n                }\r\n            },\r\n            \"device_info\" : {\r\n                \"device_type\" : \"WEB\",\r\n                \"source_ip_address\" : \"10.10.10.10\",\r\n                \"browser_user_agent\" : \"Mozilla/5.0 (WindowsNT 10.0; WOW64; rv:51.0)\"\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{{orderId}}/payments",
+				"description": "Generated from cURL: curl --location 'https://nxt-payments-service-uat.v2.pinepg.in/api/pay/v1/orders/v1-250120071201-aa-Cv1bAl/payments' \\\r\n--header 'Merchant-ID: 111303' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3MzI4MTA5NzcsImlhdCI6MTczMjc4MjE3NywianRpIjoiYjNjM2VjZjQtYmFhMS00ZTIzLWIzN2QtYjllZTI4YWUyOTUxIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiJlNDhhNWM3Yy1iYjU3LTQ1ZWUtOTRjMy0wMzU1MDcxNmVlNzQiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiI1OTE5NGZlNS00YzI3LTRlNmUtOGRlYi00ZTU5ZjhmNGZkN2IiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsInVtYV9hdXRob3JpemF0aW9uIiwiYm90QGJjNmQwMDA4LTlkOGItNDQzNi1hYWE0LTNjZmZhY2FiNTUyYiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljg5LjQ0IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC44OS40NCIsImNsaWVudF9pZCI6IjU5MTk0ZmU1LTRjMjctNGU2ZS04ZGViLTRlNTlmOGY0ZmQ3YiIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExMDc3In19.inji1UEHovPmdDBv3Y6Ey3KpMrxtjFcImvG3RZ7D40WelRwyay1GPeqKYNogP4RnWX8dDUaGStrT25rso0mS03y2b2_h2MpIpKvbmVUV973SafPTI8dxb83GNjjgX2MtyzIRteT1PQXu6vekG7smtexQScMtxQW2Uc2LmvnMceTkCCfdenb7qyg_j6yLIic_RxI0CzDUDHpQ-NRSwL_-ZYvelCtkMC74Xbz8smR9Lfa2XdMNWVygqS1SBE7Oe_Ge-FLop1OHJkaP5JNZdz-4LcyEL3y_8es_rHJXkUIhXgfA2_ZyOs7krKQrKlx4EcH45IAYtBmKfZ-D_U0FfeA-2g' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data '{\r\n    \"payments\": [\r\n        {\r\n            \"payment_method\": \"NETBANKING\",\r\n            \"payment_amount\": {\r\n                \"value\": 10000,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"netbanking_details\": {\r\n                    \"pay_code\": \"NB1531\"\r\n                }\r\n            },\r\n            \"device_info\" : {\r\n                \"device_type\" : \"WEB\",\r\n                \"source_ip_address\" : \"10.10.10.10\",\r\n                \"browser_user_agent\" : \"Mozilla/5.0 (WindowsNT 10.0; WOW64; rv:51.0)\"\r\n            }\r\n        }\r\n    ]\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Payment PBP",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Merchant-ID",
+						"value": "107444",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payments\": [\r\n        {\r\n             \"merchant_payment_reference\": 465396e8-20b8-4f8e-be84-4c81d3a079d3,\r\n            \"payment_method\": \"CARD\",\r\n            \"payment_amount\": {\r\n                \"value\": 600,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"card_details\": {\r\n                    \"name\": \"INDRANI DUTTA\",\r\n                    \"card_number\": \"4000000000001091\",\r\n                    \"cvv\": \"123\",\r\n                    \"expiry_month\": \"01\",\r\n                    \"expiry_year\": \"2026\",\r\n                    \"registered_mobile_number\": \"6351645831\"\r\n                }\r\n            }\r\n        },\r\n        {\r\n            \"payment_method\": \"POINTS\",\r\n            \"payment_amount\": {\r\n                \"value\": 1400,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"points_card_details\": {\r\n                    \"registered_mobile_number\": \"6351645831\",\r\n                    \"card_last4\": \"1091\",\r\n                    \"card_number\": \"4000000000001091\"\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{{orderId}}/payments",
+				"description": "Generated from cURL: curl --location 'https://nxt-payments-service-uat.v2.pinepg.in/api/pay/v1/orders/v1-250107052657-aa-5rwMNT/payments' \\\r\n--header 'Merchant-ID: 107444' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data '{\r\n    \"payments\": [\r\n        {\r\n             \"merchant_payment_reference\": 465396e8-20b8-4f8e-be84-4c81d3a079d3,\r\n            \"payment_method\": \"CARD\",\r\n            \"payment_amount\": {\r\n                \"value\": 600,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"card_details\": {\r\n                    \"name\": \"INDRANI DUTTA\",\r\n                    \"card_number\": \"4000000000001091\",\r\n                    \"cvv\": \"123\",\r\n                    \"expiry_month\": \"01\",\r\n                    \"expiry_year\": \"2026\",\r\n                    \"registered_mobile_number\": \"6351645831\"\r\n                }\r\n            }\r\n        },\r\n        {\r\n            \"payment_method\": \"POINTS\",\r\n            \"payment_amount\": {\r\n                \"value\": 1400,\r\n                \"currency\": \"INR\"\r\n            },\r\n            \"payment_option\": {\r\n                \"points_card_details\": {\r\n                    \"registered_mobile_number\": \"6351645831\",\r\n                    \"card_last4\": \"1091\",\r\n                    \"card_number\": \"4000000000001091\"\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "checkout Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ6cXk2RzZoa2pLMkpRQ2RRS3IwWTIzNmNyQnJUUmZxT0hLNTBtaWVaZFI0In0.eyJleHAiOjE3NDE3Mjg0MTksImlhdCI6MTc0MTcxMDQxOSwianRpIjoiYTQ4MDdiYTYtMDM2Mi00NGJhLTkwNGEtYTQxMDdhMTA5YWQ1IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiJlYzJhMzM0My1hMmRjLTRmZDktOGQxNS01NzcxODNhMGI3ZGYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiI5YmJkYjBkNS1kYzVmLTQ3MzItYmE4OC1jN2Y2YmNhMGIyZDYiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiYm90QDczZDlkOTA1LWFmYzktNGY5Zi05MDI2LTFhZDkxZWUyMzg2YyIsIm9mZmxpbmVfYWNjZXNzIiwiZGVmYXVsdC1yb2xlcy1rb25nLWF1dGgiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjAzLjc5LjE4MSIsImNsaWVudEFkZHJlc3MiOiIxMC4yMDMuNzkuMTgxIiwiY2xpZW50X2lkIjoiOWJiZGIwZDUtZGM1Zi00NzMyLWJhODgtYzdmNmJjYTBiMmQ2IiwiYXR0cnMiOnsibWVyY2hhbnQtaWQiOiIxMDQzNTkifX0.TJIHTgHEfLkaGfGwJK4cSmC2qg9Mgi11yyXR5iSsqsbBllHqL5w6HNyA4DZphPPCfCnigr8k-rjLZxu8U56ac6p_b3gO3qrQNxqo3-TkekofDbASWVqXBbZ4CAMeyaPFyszuLY3s292hlOHimcl5snoxhHACyx6HoBkJJM5Bh-Fk-LL8FdsoewdWytch5x5mPingn7fgRxjrFFGrsXxXVS3Hliz3vyq3XBFL-2ojPXXXbIVmI_OT5mnKVPCtfzoANB57d28QTn_Z9C-7BsGTzNXtg3qHHzdzVhgxvu4l2jyQLQZxbt0ouN6k_NSC5t00rJXpWxKk8QxDXNCCrX05rw"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"merchant_order_reference\": \"{{$guid}}\",\n    \"order_amount\": {\n        \"value\": 1000,\n        \"currency\": \"INR\"\n    },\n    \"notes\": \"some order\",\n    \"purchase_details\": {\n        \"account_details\": {\n            \"bank_details\": {}\n        },\n        \"customer\": {\n            \"email_id\": \"joe.sam@gmail.com\",\n            \"first_name\": \"joe\",\n            \"last_name\": \"kumar\",\n            \"customer_id\": \"123\",\n            \"country_code\": \"91\",\n            \"mobile_number\": \"9891472395\",\n            \"is_edit_customer_details_allowed\": true,\n            \"billing_address\": {\n                \"address1\": \"H.No 15, Sector 17\",\n                \"address2\": \"\",\n                \"address3\": \"\",\n                \"pincode\": \"61232112\",\n                \"city\": \"CHANDIGARH\",\n                \"state\": \"PUNJAB\",\n                \"country\": \"INDIA\"\n            },\n            \"shipping_address\": {\n                \"address1\": \"H.No 15, Sector 17\",\n                \"address2\": \"string\",\n                \"address3\": \"string\",\n                \"pincode\": \"144001123\",\n                \"city\": \"CHANDIGARH\",\n                \"state\": \"PUNJAB\",\n                \"country\": \"INDIA\"\n            }\n        },\n        \"merchant_metadata\": {\n            \"key1\": \"value1\",\n            \"key2\": \"value2\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/checkout/v1/orders"
+			},
+			"response": []
+		},
+		{
+			"name": "Capture Payment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"merchant_capture_reference\": \"merwerfw-capture-ref-r4y\",\r\n  \"capture_amount\": {\r\n    \"value\": 500,\r\n    \"currency\": \"INR\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{{orderId}}/capture",
+				"description": "Generated from cURL: curl --location --request PUT 'https://pluraluat.v2.pinepg.in/api/pay/v1/orders/v1-250121115147-aa-pN2sVV/capture' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data '{\r\n  \"merchant_capture_reference\": \"merwerfw-capture-ref-r4y\",\r\n  \"capture_amount\": {\r\n    \"value\": 500,\r\n    \"currency\": \"INR\"\r\n  }\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel Payment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Merchant-ID",
+						"value": "111657"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{{orderId}}/cancel",
+				"description": "Generated from cURL: curl --location --request PUT 'https://nxt-payments-service-uat.v2.pinepg.in/api/pay/v1/orders/v1-250115155124-aa-UizQmy/cancel' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Merchant-ID: 111657' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016'"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Refund",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accesstoken}}"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"merchant_order_reference\": {{$guid}},\r\n    \"order_amount\": {\r\n        \"value\": 500,\r\n        \"currency\": \"INR\"\r\n    },\r\n    \"merchant_metadata\":{\r\n        \"key1\": \"value\",\r\n        \"key2\": \"value\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://pluraluat.v2.pinepg.in/api/pay/v1/refunds/{{orderId}}",
+				"description": "Generated from cURL: curl --location 'https://pluraluat.v2.pinepg.in/api/pay/v1/refunds/v1-250121115147-aa-pN2sVV' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVeDFRWk5ZdDdFcWg2YnNVb2ZpeXdiZkFVY0JTdzB4clVTdlI2WkF2VURBIn0.eyJleHAiOjE3Mzc0ODkxMDMsImlhdCI6MTczNzQ2MDMwMywianRpIjoiODU0ZDU5NmYtY2JhNC00NzQ3LTlmZWUtNWVjNjNmNmEzYjVhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmtleWNsb2FrLnN2Yy5jbHVzdGVyLmxvY2FsL3JlYWxtcy9rb25nLWF1dGgiLCJzdWIiOiI4ZDZiNGQ3NC1mZGMyLTQzYzktYmFkMS0wOGEwNmE2MWMxYjEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmYmM1MmQ3ZS03MTFmLTRkNmItOTk4Ny0xODIxMzU2NzgzNjkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWtvbmctYXV0aCIsImJvdEA3MGFmZjRjNS1hNmZhLTRhZTMtYjRjNS0xNmQ5MWI1MmEyYmUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwic2NvcGUiOiIiLCJjbGllbnRIb3N0IjoiMTAuMjA4Ljk1Ljk1IiwiY2xpZW50QWRkcmVzcyI6IjEwLjIwOC45NS45NSIsImNsaWVudF9pZCI6ImZiYzUyZDdlLTcxMWYtNGQ2Yi05OTg3LTE4MjEzNTY3ODM2OSIsImF0dHJzIjp7Im1lcmNoYW50LWlkIjoiMTExNTkwIn19.LmtmhF8q49nnyrM7bKMSHcQfyyQpxqT2BQWOq03ODoe-yj2i_D0cRZqJ0D6WKiot3gmsvHKkibh6Qly0KKzVmLhOw0M7NDEVFhi8rlIXz04GEv9LMc0-F7HIrXDhFi5ytB9bGXk0QWIch7UjTPR_4Wfgjik8inwsrozoehCuEChW-kyp7ELNIM_mpfgS-0Yk-HgyHqMr87VNc-AfFkKiu-k8_s-kyK323w5VFrWOUCGeYLOqLy3Z_NvX-sYoNrszNvQWGl1S4m5Zi0enyyoB3WuvTeTTwLTU3KZW5YPLw8Bdy6JlEyPn95K2JJOVYAoewJH8I3VkYN2orrf_QT0DLg' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016' \\\r\n--data '{\r\n    \"merchant_order_reference\": 706de266-fd0d-4260-9c23-4370c42a066b,\r\n    \"order_amount\": {\r\n        \"value\": 200,\r\n        \"currency\": \"INR\"\r\n    },\r\n    \"merchant_metadata\":{\r\n        \"key1\": \"value\",\r\n        \"key2\": \"value\"\r\n    }\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "OHS details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Merchant-ID",
+						"value": "111483"
+					},
+					{
+						"key": "Cookie",
+						"value": "TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016"
+					}
+				],
+				"url": "https://nxt-order-history-service-uat.v2.pinepg.in/api/internal/v1/orders/{{orderId}}/detailed",
+				"description": "Generated from cURL: curl --location 'https://nxt-order-history-service-uat.v2.pinepg.in/api/internal/v1/orders/v1-250121160532-aa-gAZFdU/detailed' \\\r\n--header 'Merchant-ID: 111483' \\\r\n--header 'Cookie: TS01922b00=012ce8bebce0b0c60363ded49952700396b8fd3ed58c8ddb45667e53c44bdcc35e56c9005c4a56f29e572ed999e679f039d8d96016'"
+			},
+			"response": []
+		},
+		{
+			"name": "https://nxt-payments-service-dev.v2.pinepg.in/api/internal/pay/v1/orders/version/upgrade",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "User-Agent",
+						"value": "insomnia/10.3.1"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t// \"v1-250318145224-aa-p05DjS\",\n    \"v1-250319191234-aa-MWYH2F\",\n\t\"v1-250318185528-aa-MRmR6c\"\n\t// \"v1-250217134726-aa-onSg\"\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://payments-service.pluralpay.in/api/internal/pay/v1/orders/version/upgrade",
+				"description": "Generated from cURL: curl --request POST \\\n  --url https://nxt-payments-service-dev.v2.pinepg.in/api/internal/pay/v1/orders/version/upgrade \\\n  --header 'Content-Type: application/json' \\\n  --header 'User-Agent: insomnia/10.3.1' \\\n  --data '[\n\t\"v1-250217134726-aa-onSgmM\",\n\t\"v1-250217134726-aa-onSgm\",\n\t\"v1-250217134726-aa-onSg\"\n]'"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "accesstoken",
+			"value": ""
+		},
+		{
+			"key": "orderId",
+			"value": ""
+		},
+		{
+			"key": "mtoken",
+			"value": ""
+		}
+	]
+}
